@@ -1,0 +1,10 @@
+langchain
+gpt4all
+pywin32  # For Windows-specific functionality
+pybluez2
+pydantic
+Flask
+langchain_community
+python-dotenv
+langchain-huggingface # For Huggingface embeddings
+pywifi
