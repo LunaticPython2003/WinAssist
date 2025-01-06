@@ -25,7 +25,7 @@ An interactive modular ChatBot assistant capable of handling a wide variety of u
 ### 4. **Chain Execution**
 
 - Each chain contains modularized service functions to process the task.
-- Functions interact with APIs, system commands, or databases as needed through thee corresponding services in `src/backend/app/services`
+- Functions interact with APIs, system commands, or databases as needed through thee corresponding services in `app/services`
 
 ### 5. **Response Construction**
 
@@ -81,9 +81,9 @@ An interactive modular ChatBot assistant capable of handling a wide variety of u
 ## WorkFlow
 [![](https://mermaid.ink/img/pako:eNqNlMFunDAQhl9l5NNWSl5gD5XaXUXtYdVW7KlxhSZ4AlawjYxJRFb77h3Aa7J0VcHF-J9_vhlg8EkUTpHYitJjU8FxLy3wpW3ThbwN_lGKLHhtS9h8H7RPUvyB-_vPUGCg0nn9TrlhQs3Gw7DCZpcikFIm6jJnBDXoW8pjqJ_qwc9B9LAZV4jEfiZdJ40cRYG80ZblCrU9SfHVoy0q2OwvEdgNEaacpZ04iyQGATfQt4EM7JwN3tVSjPh2FCfb49IzgVN3N6mHrg7akNK4IJsUSPR_vWsqsCU8ucBvnYNYBO1sLFFMkcS_4VxT4EHXBAe0WJIhGyL8mdXclGbGL3yresearEIPaBVkRUWqq3nqLv3H6PwAt-2rKjn1wTnhR2mGXzn-x8rIoA26gIzQF9VlVKI6D8u1bQ35iO0LfOmCM_jhOwZWE3VhWUP9hl69oSf41ZHvI7SKYgJfu9Zw9_RKtWv4jz06V7cRrOg1D8M-kRe-NegfoSIfgelUEnfCsBW14pPrNGRLwT5DUmz5lgfjRQppz-xDfkFZbwuxDb6jO-FdV1Zi-4x1y7uuUXyG7DXy8WeS2qD97dxlf_4LVPXCbQ?type=png)](https://mermaid.live/edit#pako:eNqNlMFunDAQhl9l5NNWSl5gD5XaXUXtYdVW7KlxhSZ4AlawjYxJRFb77h3Aa7J0VcHF-J9_vhlg8EkUTpHYitJjU8FxLy3wpW3ThbwN_lGKLHhtS9h8H7RPUvyB-_vPUGCg0nn9TrlhQs3Gw7DCZpcikFIm6jJnBDXoW8pjqJ_qwc9B9LAZV4jEfiZdJ40cRYG80ZblCrU9SfHVoy0q2OwvEdgNEaacpZ04iyQGATfQt4EM7JwN3tVSjPh2FCfb49IzgVN3N6mHrg7akNK4IJsUSPR_vWsqsCU8ucBvnYNYBO1sLFFMkcS_4VxT4EHXBAe0WJIhGyL8mdXclGbGL3yresearEIPaBVkRUWqq3nqLv3H6PwAt-2rKjn1wTnhR2mGXzn-x8rIoA26gIzQF9VlVKI6D8u1bQ35iO0LfOmCM_jhOwZWE3VhWUP9hl69oSf41ZHvI7SKYgJfu9Zw9_RKtWv4jz06V7cRrOg1D8M-kRe-NegfoSIfgelUEnfCsBW14pPrNGRLwT5DUmz5lgfjRQppz-xDfkFZbwuxDb6jO-FdV1Zi-4x1y7uuUXyG7DXy8WeS2qD97dxlf_4LVPXCbQ)
 **<u>Input Received</u>**: The user message is sent to the Flask chatbot endpoint. <br>
-**<u>Intent Recognition</u>**: Intent identified as **`turn_on_wifi`**. <br>
+**<u>Intent Recognition</u>**: Intent identified as **`list_wifi_networks()`**. <br>
 **<u>Branch to System Control Chain</u>**: Task routed to the System Control Chain. <br>
-**<u>Execute Function</u>**: **`wifi_service.turn_on_wifi()`** is called. <br>
+**<u>Execute Function</u>**: **`WifiService.list_wifi_networks()`** is called. <br>
 **<u>Response</u>**: Success message returned: `"WiFi has been turned on."`
 
 ### Note - The system currently only supports GPT4All Open Source Models. Support for more models will be added soon. If you want to try it out, download a GPT4All compatible model in .gguf format and push it into `app/models` directory.
