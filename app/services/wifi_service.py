@@ -22,7 +22,11 @@ class WifiService:
                     "auth": network.akm[0] if network.akm else None
                 })
 
-            return networks
+            return f"Available WiFi networks:\n" + "\n".join([
+                f"SSID: {net['ssid']}, Signal: {net['signal']}dBm, "
+                f"Security: {'Protected' if net['auth'] else 'Open'}"
+                for net in networks
+            ])
         except Exception as e:
             return f"Error listing WiFi networks: {str(e)}"
 
