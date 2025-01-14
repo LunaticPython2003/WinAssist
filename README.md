@@ -86,4 +86,7 @@ An interactive modular ChatBot assistant capable of handling a wide variety of u
 **<u>Execute Function</u>**: **`wifi_service.turn_on_wifi()`** is called. <br>
 **<u>Response</u>**: Success message returned: `"WiFi has been turned on."`
 
-### Note - The system currently only supports GPT4All Open Source Models. Support for more models will be added soon. If you want to try it out, download a GPT4All compatible model in .gguf format and push it into `app/models` directory.
+### Note - The system currently only supports -
+- GPT4All Open Source Models: Models have to be exported to .gguf file in `app/models` directory
+- Groq AI: Just enter the Groq API Key in .env file and it will default to ChatGroq
+- Preliminary support for OpenAI and Anthropic coming in the next commit!
