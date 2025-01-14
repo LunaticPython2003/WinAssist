@@ -6,8 +6,7 @@ from app.services.wifi_service import WifiService
 
 class ChatbotChain:
 
-    def __init__(self, MODEL_PATH, user_prompt):
-        self.MODEL_PATH = MODEL_PATH
+    def __init__(self, user_prompt):
         self.user_prompt = user_prompt
         print(type(user_prompt))
     def get_template(self):
