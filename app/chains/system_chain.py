@@ -1,53 +1,50 @@
-from langchain_core.output_parsers import StrOutputParser
-from pywifi import const
-import time
-from langchain.agents import Tool
+from langchain.tools import StructuredTool
 from app.services.wifi_service import WifiService
 
 class SystemChain:
 
-    def __init__(self, MODEL_PATH, user_prompt):
-        self.MODEL_PATH = MODEL_PATH
+    def __init__(self,  user_prompt):
         self.user_prompt = user_prompt
 
     def get_template(self):
-        template = """You are an expert system assistant. Your primary function is to determine the appropriate chain to use based on the user's request.
+        template = """You are a helpful system assistant that specializes in managing system settings and network connections. When providing information about WiFi networks, you should analyze the available networks and present them in a clear, informative way. Include relevant details about signal strength and explain what the information means for the user.
 
-                If the user's request is related to controlling system settings or hardware, such as:
-                - Changing screen brightness
-                - Adjusting volume
-                - Managing Wi-Fi connections (turning on/off, connecting to networks)
-                - Controlling Bluetooth (pairing devices, turning on/off)
-                - Managing system updates
-                - Checking system status (battery, memory, etc.)
-                - Power management (sleep, restart, shutdown)
-                - File system operations (if applicable in your context)
+        If you receive a list of WiFi networks, you should:
+        1. Present the networks in a clear format
+        2. Highlight the strongest connections
+        3. Explain what the signal strength means for connectivity
+        4. Provide any relevant recommendations based on the network information
 
-                Then respond with a variation of the text: "Sure, processing the system command!"
-                User input: {query}
-                Important: After you provide a response, you should not ask any follow-up questions or request additional information. You should only provide a single response to the query.
-            """
+        When working with system commands:
+        - For WiFi operations: Present network information in a user-friendly way
+        - For other system operations: Clearly explain what actions are being taken
+        - Always confirm when operations are completed successfully
+
+        User input: {query}
+
+        Remember to list each fetched network in bullet points and provide a recommendation on which network would be the best to connect to, and a brief explanation in about 50-100 words why you arrived at the same.
+        """
         return template
 
 class SystemTools(SystemChain):
 
-    def __init__(self, MODEL_PATH, user_prompt):
-        super().__init__(MODEL_PATH, user_prompt)
+    def __init__(self, user_prompt):
+        super().__init__(user_prompt)
 
 
-    list_wifi_tool = Tool(
+    list_wifi_tool = StructuredTool.from_function(
             name="list_wifi_networks",
             func=WifiService().list_wifi_networks,
             description="Useful when the user wants to see a list of available Wi-Fi networks.",
         )
 
-    connect_wifi_tool = Tool(
+    connect_wifi_tool = StructuredTool.from_function(
             name="connect_wifi",
             func=WifiService().connect_wifi,
             description="Useful when the user wants to connect to a specific Wi-Fi network.",
         )
 
-    disconnect_wifi_tool = Tool(
+    disconnect_wifi_tool = StructuredTool.from_function(
             name="disconnect_wifi",
             func=WifiService().disconnect_wifi,
             description="Useful when the user wants to disconnect from the current Wi-Fi network.",
