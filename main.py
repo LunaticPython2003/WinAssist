@@ -43,6 +43,7 @@ class RouterChain:
             ChatbotChain(self.prompt).get_template()
         ]
         self.tools_list = [
+            self.tools.turn_on_wifi_tool,
             self.tools.list_wifi_tool,
             self.tools.connect_wifi_tool,
             self.tools.disconnect_wifi_tool
