@@ -26,26 +26,30 @@ class SystemChain:
         """
         return template
 
-class SystemTools(SystemChain):
+class SystemTools:
+    def __init__(self):
+        self.wifi_service = WifiService()
 
-    def __init__(self, user_prompt):
-        super().__init__(user_prompt)
-
+    turn_on_wifi_tool = StructuredTool.from_function(
+        name="turn_on_wifi",
+        func=lambda: WifiService().turn_on_wifi(),
+        description="Turns on WiFi if it's currently disabled."
+    )
 
     list_wifi_tool = StructuredTool.from_function(
-            name="list_wifi_networks",
-            func=WifiService().list_wifi_networks,
-            description="Useful when the user wants to see a list of available Wi-Fi networks.",
-        )
+        name="list_wifi_networks",
+        func=lambda: WifiService().list_wifi_networks(),
+        description="Lists available WiFi networks."
+    )
 
     connect_wifi_tool = StructuredTool.from_function(
-            name="connect_wifi",
-            func=WifiService().connect_wifi,
-            description="Useful when the user wants to connect to a specific Wi-Fi network.",
-        )
+        name="connect_wifi",
+        func=lambda ssid, password: WifiService().connect_wifi(ssid, password),
+        description="Connects to a specific WiFi network."
+    )
 
     disconnect_wifi_tool = StructuredTool.from_function(
-            name="disconnect_wifi",
-            func=WifiService().disconnect_wifi,
-            description="Useful when the user wants to disconnect from the current Wi-Fi network.",
-        )
+        name="disconnect_wifi",
+        func=lambda: WifiService().disconnect_wifi(),
+        description="Disconnects from the current WiFi network."
+    )
