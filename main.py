@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for
 from langchain_community.utils.math import cosine_similarity
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableLambda, RunnablePassthrough
@@ -34,7 +34,7 @@ class RouterChain:
             model_path = os.path.join(os.path.dirname(__file__), "app", "models", model_filename)
             self.llm = GPT4All(model=model_path, temperature=0)
 
-        self.tools = SystemTools(prompt)
+        self.tools = SystemTools()
         self.setup_templates_and_tools()
 
     def setup_templates_and_tools(self):
@@ -64,13 +64,7 @@ class RouterChain:
 
     def execute(self, input_query):
         route = self.route_prompt({"query": input_query})
-
-        if route == "system":
-            response = self.execute_system(input_query)
-        else:
-            response = self.execute_chatbot(input_query)
-
-        return response
+        return {"route": route, "query": input_query}
 
     def execute_system(self, input_query):
         # Create and execute agent
@@ -130,11 +124,15 @@ def chat():
         return jsonify({"error": "No prompt provided"}), 400
 
     router = RouterChain(prompt)
-    response = router.execute(prompt)
-    return jsonify(response)
+    routing_result = router.execute(prompt)
 
-@app.route('/system', methods=['POST'])
-def system():
+    if routing_result["route"] == "system":
+        return redirect(url_for('chat_system'), code=307)  # 307 preserves the POST method
+    else:
+        return redirect(url_for('chat_chatbot'), code=307)
+
+@app.route('/chat/system', methods=['POST'])
+def chat_system():
     data = request.get_json()
     prompt = data.get('prompt', '')
 
@@ -145,8 +143,8 @@ def system():
     response = router.execute_system(prompt)
     return jsonify(response)
 
-@app.route('/chatbot', methods=['POST'])
-def chatbot():
+@app.route('/chat/chatbot', methods=['POST'])
+def chat_chatbot():
     data = request.get_json()
     prompt = data.get('prompt', '')
 
@@ -155,7 +153,7 @@ def chatbot():
 
     router = RouterChain(prompt)
     response = router.execute_chatbot(prompt)
-    return jsonify(response)
+    return jsonify({"response": response})
 
 if __name__ == '__main__':
     app.run(debug=True)
