@@ -30,31 +30,41 @@ class SystemTools:
     def __init__(self):
         self.wifi_service = WifiService()
 
-    turn_on_wifi_tool = StructuredTool.from_function(
-        name="turn_on_wifi",
-        func=lambda: WifiService().turn_on_wifi(),
-        description="Turns on WiFi if it's currently disabled."
-    )
+    def return_tools(self):
+        turn_on_wifi_tool = StructuredTool.from_function(
+            name="turn_on_wifi",
+            func=lambda: WifiService().turn_on_wifi(),
+            description="Turns on WiFi if it's currently disabled."
+        )
 
-    list_wifi_tool = StructuredTool.from_function(
-        name="list_wifi_networks",
-        func=lambda: WifiService().list_wifi_networks(),
-        description="Lists available WiFi networks."
-    )
+        list_wifi_tool = StructuredTool.from_function(
+            name="list_wifi_networks",
+            func=lambda: WifiService().list_wifi_networks(),
+            description="Lists available WiFi networks."
+        )
 
-    connect_wifi_tool = StructuredTool.from_function(
-        name="connect_wifi",
-        func=lambda ssid, password: WifiService().connect_wifi(ssid, password),
-        description="Connects to a specific WiFi network."
-    )
+        connect_wifi_tool = StructuredTool.from_function(
+            name="connect_wifi",
+            func=lambda ssid, password: WifiService().connect_wifi(ssid, password),
+            description="Connects to a specific WiFi network."
+        )
 
-    disconnect_wifi_tool = StructuredTool.from_function(
-        name="disconnect_wifi",
-        func=lambda: WifiService().disconnect_wifi(),
-        description="Disconnects from the current WiFi network."
-    )
-    list_bluetooth_tool = StructuredTool.from_function(
-        name="list_bluetooth_devices",
-        func=lambda: BluetoothService().list_bluetooth_devices(),
-        description="Lists available Bluetooth devices."
-    )
+        disconnect_wifi_tool = StructuredTool.from_function(
+            name="disconnect_wifi",
+            func=lambda: WifiService().disconnect_wifi(),
+            description="Disconnects from the current WiFi network."
+        )
+        list_bluetooth_tool = StructuredTool.from_function(
+            name="list_bluetooth_devices",
+            func=lambda: BluetoothService().list_bluetooth_devices(),
+            description="Lists available Bluetooth devices."
+        )
+
+        self.tools = [
+                turn_on_wifi_tool,
+                list_wifi_tool,
+                connect_wifi_tool,
+                disconnect_wifi_tool,
+                list_bluetooth_tool
+            ]
+        return self.tools

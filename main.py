@@ -34,21 +34,21 @@ class RouterChain:
             model_path = os.path.join(os.path.dirname(__file__), "app", "models", model_filename)
             self.llm = GPT4All(model=model_path, temperature=0)
 
-        self.tools = SystemTools()
-        self.setup_templates_and_tools()
+        # self.tools = SystemTools()
+        self.get_templates()
 
-    def setup_templates_and_tools(self):
+    def get_templates(self):
         self.prompt_templates = [
             SystemChain(self.prompt).get_template(),
             ChatbotChain(self.prompt).get_template()
         ]
-        self.tools_list = [
-            self.tools.turn_on_wifi_tool,
-            self.tools.list_wifi_tool,
-            self.tools.connect_wifi_tool,
-            self.tools.disconnect_wifi_tool,
-            self.tools.list_bluetooth_tool
-        ]
+        # self.tools_list = [
+        #     self.tools.turn_on_wifi_tool,
+        #     self.tools.list_wifi_tool,
+        #     self.tools.connect_wifi_tool,
+        #     self.tools.disconnect_wifi_tool,
+        #     self.tools.list_bluetooth_tool
+        # ]
         self.prompt_embeddings = self.embeddings.embed_documents(self.prompt_templates)
 
     def route_prompt(self, input_dict):
@@ -68,6 +68,10 @@ class RouterChain:
         return {"route": route, "query": input_query}
 
     def execute_system(self, input_query):
+
+        self.tools = SystemTools()
+        self.tools_list = self.tools.return_tools()
+
         # Create and execute agent
         prompt = hub.pull("hwchase17/structured-chat-agent")
         agent = create_structured_chat_agent(
