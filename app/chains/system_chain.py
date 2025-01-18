@@ -1,5 +1,6 @@
 from langchain.tools import StructuredTool
 from app.services.wifi_service import WifiService
+from app.services.bluetooth_service import BluetoothService
 
 class SystemChain:
 
@@ -7,22 +8,21 @@ class SystemChain:
         self.user_prompt = user_prompt
 
     def get_template(self):
-        template = """You are a helpful system assistant that specializes in managing system settings and network connections. When providing information about WiFi networks, you should analyze the available networks and present them in a clear, informative way. Include relevant details about signal strength and explain what the information means for the user.
+        template = """You are a system assistant specializing in managing WiFi and Bluetooth connections. When analyzing networks or devices, present information clearly with relevant details such as signal strength, pairing status, and security.
 
-        If you receive a list of WiFi networks, you should:
-        1. Present the networks in a clear format
-        2. Highlight the strongest connections
-        3. Explain what the signal strength means for connectivity
-        4. Provide any relevant recommendations based on the network information
+        WiFi:
+        List networks with signal strength and security type.
+        Highlight the strongest connections.
+        Recommend the best network with a brief explanation.
 
-        When working with system commands:
-        - For WiFi operations: Present network information in a user-friendly way
-        - For other system operations: Clearly explain what actions are being taken
-        - Always confirm when operations are completed successfully
+        Bluetooth:
+        List devices with pairing status and signal strength.
+        Highlight paired or high-signal devices.
+        Recommend the best device to connect with and explain why.
 
-        User input: {query}
+        User Input: {query}
 
-        Remember to list each fetched network in bullet points and provide a recommendation on which network would be the best to connect to, and a brief explanation in about 50-100 words why you arrived at the same.
+        Confirm actions and summarize results clearly. Keep recommendations concise (50-100 words).
         """
         return template
 
@@ -52,4 +52,9 @@ class SystemTools:
         name="disconnect_wifi",
         func=lambda: WifiService().disconnect_wifi(),
         description="Disconnects from the current WiFi network."
+    )
+    list_bluetooth_tool = StructuredTool.from_function(
+        name="list_bluetooth_devices",
+        func=lambda: BluetoothService().list_bluetooth_devices(),
+        description="Lists available Bluetooth devices."
     )
